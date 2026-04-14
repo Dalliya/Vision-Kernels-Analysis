@@ -1,104 +1,104 @@
-👁️ Vision Kernels & Neural Topology: A Comparative Study of Convolutional Feature Extraction
-📌 Project Overview
-This repository implements an advanced research laboratory for deconstructing Digital Image Processing and Convolutional Neural Network (CNN) layers. The core objective is to analyze how specific mathematical kernels react to different data topologies: the structured geometry of a Clear Highway versus the stochastic, high-frequency noise of a Rainy City.
+👁️ Vision Kernels & Neural Topology: A 21-Step Research Report
+📌 Abstract
+This project is a systematic deconstruction of convolutional feature extraction. We analyze 21 distinct states of image transformation, proving the transition from classical mathematical kernels to neural architectural layers.
 
-The project transitions from classical discrete differentiation to modern architectural layers, concluding with a rigorous Parameter Sensitivity Analysis evaluating linear system volatility.
+🔬 Phase I: Edge Detection (Experiment A)
+1. Highway: Sobel-X
 
-🔬 Experimental Breakdown & Technical Analysis
-🔹 Block I: Gradient Feature Extraction (Edge Detection)
+Conclusion: Successfully captures vertical lane markers. Proves that first-order derivatives are ideal for extracting structured geometric primitives.
 
-Kernels: Sobel (X/Y), Prewitt, Roberts, and Laplacian operators.
+2. Highway: Sobel-Y
 
-Analysis: These filters approximate the partial derivatives of the image intensity. Sobel and Prewitt are highly effective for directional features, while Laplacian (2nd order) is an isotropic blob detector.
+Conclusion: Isolates horizontal boundaries and horizon lines. Essential for establishing the full gradient vector field of the scene.
 
-Conclusion: Structured environments allow for high-confidence gradient extraction. However, raw derivative filters are catastrophic in noisy environments, where stochastic point-anomalies (rain) are misinterpreted as valid edges.
+3. Highway: Laplacian
 
-🔹 Block II: Stochastic Noise Suppression (Smoothing)
+Conclusion: A second-order operator acting as a skeletal map. It highlights isotropic intensity changes but shows high sensitivity to asphalt texture.
 
-Kernels: Gaussian, Mean (Box), and Median filters.
+4. Highway: Prewitt
 
-Analysis: Linear kernels (Gaussian) attenuate noise but blur structural boundaries. The Median Filter uses non-linear rank-order statistics to eradicate "salt-and-pepper" noise while preserving pristine edges.
+Conclusion: Similar to Sobel but with a simpler mask. Provides a harsher, high-contrast edge response suitable for hard-contour detection.
 
-Conclusion: For autonomous systems in adverse weather, non-linear filtering is mathematically superior to linear blurring for edge preservation.
+5. Highway: Roberts
 
-🔹 Block III: Hierarchical Restoration Pipeline
+Conclusion: Uses a 2x2 diagonal mask. Offers superior precision for sharp intersections and high-contrast diagonal features.
 
-Logic: A sequential chain: Median Denoising -> Unsharp Masking -> Edge Extraction.
+6. Rainy City: Sobel-X
 
-Conclusion: This demonstrates Hierarchical Feature Recovery. We prove that high-frequency data lost during denoising can be recovered via Unsharp Masking before final feature extraction.
+Conclusion: Failed State. The gradient extraction is heavily corrupted by raindrops, which the kernel interprets as valid vertical features.
 
-🔹 Block IV: Texture Analysis (Gabor Filter Banks)
+7. Rainy City: Sobel-Y
 
-Logic: Directional wavelets designed to mimic the human primary visual cortex (V1).
+Conclusion: Failed State. Horizontal rain streaks create massive signal noise, completely obscuring vehicle lane markers.
 
-Conclusion: Gabor filters elegantly segment road textures but trigger chaotic responses on rain droplets, proving that point-anomalies contain all spatial frequencies simultaneously.
+8. Rainy City: Laplacian
 
-🔹 Block V: Spatial Reduction (CNN Pooling)
+Conclusion: Maximum Entropy. The second-order derivative amplifies every single raindrop, proving that isotropic detectors are mathematically dangerous in noisy environments.
 
-Logic: Comparing Max Pooling (peak activation) vs. Average Pooling (local mean).
+9. Rainy City: Prewitt
 
-Conclusion: Max Pooling is the industry standard because it retains the strongest feature signals (edges) during a 75% dimensionality reduction, whereas Average Pooling dilutes critical feature responses.
+Conclusion: High signal-to-noise ratio issues. Without preprocessing, the Prewitt operator creates a chaotic feature map that an AI model cannot interpret.
 
-🔹 Block VI: Advanced CNN Topology
+10. Rainy City: Roberts
 
-Logic: Pointwise (1x1) convolutions and Dilated (Atrous) kernels.
+Conclusion: Sharp but noisy. Captures the high-frequency "salt" of the rain, highlighting the absolute need for low-pass filtering.
 
-Conclusion: 1x1 convolutions act as optimized channel mixers, while Dilated kernels successfully expand the receptive field to capture larger structures without resolution loss.
+🔬 Phase II: Smoothing & Restoration (Experiment B & C)
+11. Rainy: Gaussian Blur
 
-🔹 Block VII: Parameter Sensitivity (The ±1 Stress Test)
+Conclusion: Linear Smoothing. Successfully attenuates noise but "bleeds" the edges of the vehicles, causing a loss of structural resolution.
 
-The Experiment: We shifted the central weight of a Sharpen kernel from 5 to 6 (+1 shift).
+12. Rainy: Mean Filter
 
-Metrics: Sum of Absolute Differences (SAD).
+Conclusion: Box Smoothing. Leads to significant blurring of car silhouettes, proving that uniform averaging is too aggressive for feature preservation.
 
-Conclusion: A minor weight shift causes explosive signal variance. This mathematically validates why automated gradient descent is mandatory: manual weight tuning in high-dimensional space is fundamentally unstable.
+13. Rainy: Median Filter
 
-📸 Research Results: Visual Gallery
-1. Edge Extraction Stability (Highway vs. Rain)
+Conclusion: Mathematical Winner. Rank-order statistics effectively eradicate raindrops while maintaining perfectly sharp boundaries of the car geometry.
 
-Dataset	Filter: Sobel-X	Filter: Laplacian
-Clear Highway		
-Rainy City		
-2. Denoising & Noise Restoration
+14. Sequential Pipeline: Restored Edges
 
-Gaussian Blur (Linear)	Median Filter (Non-Linear)	Pipeline: Restored Edges
-3. CNN Architecture & Downsampling
+Conclusion: Proves that structural recovery via Unsharp Masking after denoising allows for high-confidence feature extraction in chaotic conditions.
 
-Max Pooling (2x2)	Average Pooling (2x2)	Dilated (Atrous) Conv
-4. Parameter Volatility (SAD Metric Map)
+🔬 Phase III: Texture & CNN Dynamics (Experiment D, E & F)
+15. Texture: Highway Gabor (0°)
 
-Base Sharpen (W=5)	Shifted Sharpen (W=6)	SAD Difference Map
-🚀 Replicating the Study
-1. Clone the environment:
+Conclusion: Isolates horizontal asphalt textures. Mimics the human visual system's orientation-specific neuron responses.
 
-Bash
-git clone https://github.com/Dalliya/Vision-Kernels-Analysis.git
-cd Vision-Kernels-Analysis
-pip install numpy opencv-python pillow
-2. Execute the Research Engine:
+16. Texture: Highway Gabor (Combined)
 
-Bash
-python src/main.py
-Annotations are rendered using an anti-aliased PIL engine for maximum legibility.
+Conclusion: Established a multi-directional texture map. Essential for surface classification and road condition analysis.
 
-📂 Project Structure
-Plaintext
-├── data/
-│   ├── raw/                  # Source Input Tensors
-│   └── processed_annotated/  # Final Annotated Reports
-├── src/
-│   ├── filters/              # OOP Kernel Classes
-│   ├── utils/
-│   │   ├── visuals.py        # Professional UI Annotation Engine
-│   │   └── image_io.py       # Load/Save Wrappers
-│   ├── main.py               # Orchestrator
-│   └── experiments.py        # Research Logics (A-G)
-└── README.md
+17. Max Pooling (2x2)
+
+Conclusion: Structural compression. Successfully retains peak edge activations while reducing data dimensionality by 75%.
+
+18. Average Pooling (2x2)
+
+Conclusion: Signal dilution. The averaging process washes out critical edge gradients, making it inferior to Max Pooling for feature retention.
+
+19. CNN: 1x1 Pointwise Convolution
+
+Conclusion: Feature mixing. Successfully compressed Sobel X and Y channels into a single optimized tensor, simulating MobileNet's efficient architecture.
+
+20. CNN: Dilated (Atrous) Convolution
+
+Conclusion: Receptive field expansion. Captured larger structural context in the rainy scene without increasing the kernel's parameter count.
+
+🔬 Phase IV: Sensitivity Metrics (Experiment G)
+21. SAD Difference Map (The ±1 Shift)
+
+Conclusion: Explosive variance. A minor shift from 5 to 6 causes massive signal amplification. This validates why automated gradient descent is the only way to find stable weights.
 
 👩‍💻 About the Author
-Dariia Zhdanova (@Dalliya)
-Architect of Neural Topology | ML Researcher
+Dariia Zhdanova ML Explorer | Architect of Neural Topology
 
-I specialize in deconstructing complex Deep Learning concepts down to their mathematical foundations. I believe that true engineering isn't about calling model.fit(), but about understanding the exact geometry of the feature spaces we build.
+"I specialize in deconstructing complex Deep Learning concepts down to their mathematical foundations. I believe that true engineering isn't about calling model.fit(), but about understanding the exact geometry of the hyperplanes we build."
 
-📫 Connect: GitHub | LinkedIn
+"In this study, I transitioned from manual mathematical foundations to automated linear stress-testing, proving that the massive performance gap between structured silhouettes and chaotic satellite textures is the exact point where pure logic demands deeper neural connections."
+
+📫 Connect with me:
+
+GitHub: @Dalliya(Dariia Zhdanova)
+
+LinkedIn: Dariia Zhdanova (https://www.linkedin.com/in/dariia-z-b7146223a)
