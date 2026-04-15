@@ -30,7 +30,7 @@ To stress-test the kernels, two distinct images were processed. Upon loading, im
 | :--- | :---: | :---: |
 | **Sobel X**<br>*(Horizontal Gradient)* | <img src="data/processed_annotated/clear_highway_sobel_x-axis.jpg" width="400"> | <img src="data/processed_annotated/pipeline_3_edges_sobel_x.jpg" width="400"> |
 | **Prewitt X**<br>*(Harsher Edge Map)* | <img src="data/processed_annotated/clear_highway_prewitt_x-axis.jpg" width="400"> | <img src="data/processed_annotated/pipeline_3_edges_prewitt_x.jpg" width="400"> |
-| **Roberts**<br>*(Diagonal Cross)* | <img src="data/processed_annotated/clear_highway_roberts_cross_diagonal" width="400"> | <img src="data/processed_annotated/pipeline_3_edges_roberts.jpg" width="400"> |
+| **Roberts**<br>*(Diagonal Cross)* | <img src="data/processed_annotated/clear_highway_roberts_cross_diagonal.jpg" width="400"> | <img src="data/processed_annotated/pipeline_3_edges_roberts.jpg" width="400"> |
 
 > **💡 Engineering Conclusion:** > * **Clear Highway:** Linear derivative filters (Sobel, Prewitt) efficiently extract structural boundaries. Roberts excels at pinpointing high-contrast intersections.
 > * **Rainy City:** Raw derivatives fail completely on noisy data (amplifying rain). However, by applying them *after* a smoothing pipeline, we successfully extract the underlying geometry of the vehicles.
