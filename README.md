@@ -90,10 +90,15 @@ To stress-test the kernels, two distinct images were processed. Upon loading, im
 
 ---
 
-## 🔬 Block 6: Metrics & Sensitivity Analysis (Tasks 7 & 8)
+## 🔬 Block 6: Metrics & Sensitivity Analysis
 *Evaluating filter stability by shifting a central kernel parameter by $\pm 1$ ($W_{center}=5 \rightarrow W_{center}=6$).*
 
+| Base Kernel (Center Weight = 5) | Shifted Kernel (Center Weight = 6) |
+| :---: | :---: |
+| <img src="data/processed_annotated/metrics_1_base_sharpen_5.jpg" width="400"> | <img src="data/processed_annotated/metrics_2_shifted_sharpen_6.jpg" width="400"> |
+
 <div align="center">
+  <b>Visualizing the Difference (SAD Map)</b><br>
   <img src="data/processed_annotated/metrics_3_difference_map.jpg" width="600">
 </div>
 
@@ -105,6 +110,7 @@ $$SAD = \sum_{i,j} |I_{Base}(i,j) - I_{Shifted}(i,j)|$$
 > The SAD metric quantifies a massive pixel-wise divergence caused by a minor $+1$ shift in a $3\times 3$ Sharpening matrix. 
 > 1. Linear high-frequency filters are **highly unstable**; minor manual parameter adjustments cause explosive variance in the output signal.
 > 2. **Project Thesis:** This sensitivity proves why manual crafting of convolutional kernels (Classical CV) is insufficient for complex environments. It validates the necessity of Automated Gradient Descent (Deep Learning) as the only reliable method to discover stable, generalized architectural weights.
+
 
 ---
 
