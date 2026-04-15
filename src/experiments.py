@@ -20,7 +20,7 @@ from src.filters.pooling import MaxPooling, AveragePooling
 # Block 5: Advanced CNN Convolutions
 from src.filters.advanced_conv import DilatedConvolution, Conv1x1
 
-# Block 6: Metrics & Evaluation (ADDED)
+# Block 6: Metrics & Evaluation
 from src.filters.base import BaseKernelFilter
 
 
@@ -30,7 +30,16 @@ def run_edge_detection_experiment(image_tensor: np.ndarray) -> List[Tuple[str, n
     Evaluates classic derivative-based operators.
     """
     print("[EXPERIMENT] Running Edge Detection kernels...")
-    filters = [SobelFilterX(), SobelFilterY(), LaplacianFilter()]
+    
+    # ИСПРАВЛЕНО: Добавлены Prewitt и Roberts для корректного запуска на всех картинках!
+    filters = [
+        SobelFilterX(), 
+        SobelFilterY(), 
+        LaplacianFilter(),
+        PrewittFilterX(),
+        RobertsFilter()
+    ]
+    
     results = []
     for f in filters:
         results.append((f.name, f.apply(image_tensor)))
