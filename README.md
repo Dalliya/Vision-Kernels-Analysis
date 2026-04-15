@@ -1,117 +1,114 @@
-# 👁️ Vision Kernels & Neural Topology: A 21-Step Research Report
+<div align="center">
 
-## 📌 Abstract
-This project is a systematic deconstruction of convolutional feature extraction. We analyze 21 distinct states of image transformation, proving the transition from classical mathematical kernels to neural architectural layers.
+# 👁️ Convolutional Kernels & Neural Topology
+### *A Mathematical and Empirical Deconstruction of Computer Vision*
+
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![OpenCV](https://img.shields.io/badge/OpenCV-4.x-green?style=for-the-badge&logo=opencv&logoColor=white)](https://opencv.org/)
+[![NumPy](https://img.shields.io/badge/NumPy-Data_Science-013243?style=for-the-badge&logo=numpy&logoColor=white)](https://numpy.org/)
+[![Machine Learning](https://img.shields.io/badge/Domain-Computer_Vision-FF6F00?style=for-the-badge)](#)
+
+*An in-depth analysis of linear and non-linear spatial filters, transitioning from classical mathematical feature extraction to advanced architectural neural layers.*
+
+---
+</div>
+
+## 📌 Project Overview
+This project serves as a comprehensive empirical study of convolutional filters and their role in feature extraction, noise reduction, and structural topology. Conducted using **OpenCV**, the pipeline systematically evaluates linear and non-linear operators, transitioning from classical mathematical kernels to advanced architectural layers (CNNs).
+
+### 📊 Dataset Characteristics (Tasks 1, 3, 4)
+To stress-test the kernels, two distinct images were processed. Upon loading, image dimensions and channel configurations were logged, and tensors were reduced to single-channel (grayscale) to isolate structural luminance:
+1. **High-Contrast Image (Clear Highway):** Features strong geometric primitives (lane markers, horizon) and a uniform background.
+2. **Low-Contrast & Noisy Image (Rainy City):** Features complex, clustered details obscured by extreme high-frequency noise (rain streaks).
 
 ---
 
-## 🔬 Phase I: Edge Detection (Experiment A)
+## 🔬 Block 1: Feature Extraction (Edge Detection)
+*Evaluating discrete derivative convolutions. To demonstrate environmental robustness, raw Edge Detection on the Clear Highway is compared against Edge Detection applied to the Rainy City (after noise-removal pipeline).*
 
-### 1. Highway: Sobel-X
-![Highway Sobel-X](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/clear_highway_sobel_x.jpg)
-**Conclusion:** Successfully captures vertical lane markers. Proves that first-order derivatives are ideal for extracting structured geometric primitives.
+| Filter Type | High Contrast (Clear Highway) | Low Contrast (Restored Rainy City) |
+| :--- | :---: | :---: |
+| **Sobel X**<br>*(Horizontal Gradient)* | <img src="data/processed_annotated/clear_highway_sobel_x.jpg" width="400"> | <img src="data/processed_annotated/pipeline_3_edges_sobel_x.jpg" width="400"> |
+| **Prewitt X**<br>*(Harsher Edge Map)* | <img src="data/processed_annotated/clear_highway_prewitt_x.jpg" width="400"> | <img src="data/processed_annotated/pipeline_3_edges_prewitt_x.jpg" width="400"> |
+| **Roberts**<br>*(Diagonal Cross)* | <img src="data/processed_annotated/clear_highway_roberts.jpg" width="400"> | <img src="data/processed_annotated/pipeline_3_edges_roberts.jpg" width="400"> |
 
-### 2. Highway: Sobel-Y
-![Highway Sobel-Y](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/clear_highway_sobel_y.jpg)
-**Conclusion:** Isolates horizontal boundaries and horizon lines. Essential for establishing the full gradient vector field of the scene.
-
-### 3. Highway: Laplacian
-![Highway Laplacian](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/clear_highway_laplacian.jpg)
-**Conclusion:** A second-order operator acting as a skeletal map. It highlights isotropic intensity changes but shows high sensitivity to asphalt texture.
-
-### 4. Highway: Prewitt
-![Highway Prewitt](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/clear_highway_prewitt.jpg)
-**Conclusion:** Similar to Sobel but with a simpler mask. Provides a harsher, high-contrast edge response suitable for hard-contour detection.
-
-### 5. Highway: Roberts
-![Highway Roberts](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/clear_highway_roberts_cross.jpg)
-**Conclusion:** Uses a 2x2 diagonal mask. Offers superior precision for sharp intersections and high-contrast diagonal features.
-
-### 6. Rainy City: Sobel-X
-![Rainy Sobel-X](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/rainy_city_sobel_x.jpg)
-**Conclusion:** Failed State. The gradient extraction is heavily corrupted by raindrops, which the kernel interprets as valid vertical features.
-
-### 7. Rainy City: Sobel-Y
-![Rainy Sobel-Y](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/rainy_city_sobel_y.jpg)
-**Conclusion:** Failed State. Horizontal rain streaks create massive signal noise, completely obscuring vehicle lane markers.
-
-### 8. Rainy City: Laplacian
-![Rainy Laplacian](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/rainy_city_laplacian.jpg)
-**Conclusion:** Maximum Entropy. The second-order derivative amplifies every single raindrop, proving that isotropic detectors are mathematically dangerous in noisy environments.
-
-### 9. Rainy City: Prewitt
-![Rainy Prewitt](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/rainy_city_prewitt.jpg)
-**Conclusion:** High signal-to-noise ratio issues. Without preprocessing, the Prewitt operator creates a chaotic feature map.
-
-### 10. Rainy City: Roberts
-![Rainy Roberts](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/rainy_city_roberts_cross.jpg)
-**Conclusion:** Sharp but noisy. Captures the high-frequency "salt" of the rain, highlighting the absolute need for low-pass filtering.
+> **💡 Engineering Conclusion:** > * **Clear Highway:** Linear derivative filters (Sobel, Prewitt) efficiently extract structural boundaries. Roberts excels at pinpointing high-contrast intersections.
+> * **Rainy City:** Raw derivatives fail completely on noisy data (amplifying rain). However, by applying them *after* a smoothing pipeline, we successfully extract the underlying geometry of the vehicles.
 
 ---
 
-## 🔬 Phase II: Smoothing & Restoration (Experiment B & C)
+## 🔬 Block 2: Smoothing & Blurring (Noise Reduction)
+*Analyzing linear vs. non-linear spatial filters to process the highly noisy Rainy City tensor.*
 
-### 11. Rainy: Gaussian Blur
-![Rainy Gaussian](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/rainy_city_gaussian.jpg)
-**Conclusion:** Linear Smoothing. Successfully attenuates noise but "bleeds" the edges of the vehicles, causing a loss of structural resolution.
-
-### 12. Rainy: Mean Filter
-![Rainy Mean](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/rainy_city_mean.jpg)
-**Conclusion:** Box Smoothing. Leads to significant blurring of car silhouettes, proving that uniform averaging is too aggressive for feature preservation.
-
-### 13. Rainy: Median Filter
-![Rainy Median](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/rainy_city_median.jpg)
-**Conclusion:** Mathematical Winner. Rank-order statistics effectively eradicate raindrops while maintaining perfectly sharp boundaries of the car geometry.
-
-### 14. Sequential Pipeline: Restored Edges
-![Pipeline Restored](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/pipeline_sequential_pipeline.jpg)
-**Conclusion:** Proves that structural recovery via Unsharp Masking after denoising allows for high-confidence feature extraction in chaotic conditions.
+| Kernel Operation | Result on Noisy Image (Rainy City) | Analytical Commentary |
+| :--- | :---: | :--- |
+| **Mean Filter**<br>*(Linear Average)* | <img src="data/processed_annotated/rainy_city_mean.jpg" width="250"> | Uniform averaging successfully dilutes rain noise, but aggressively blurs critical structural boundaries (car silhouettes). |
+| **Gaussian Blur**<br>*(Linear Weighted)* | <img src="data/processed_annotated/rainy_city_gaussian.jpg" width="250"> | Provides a more natural blur by weighting central pixels higher. However, it still fails to preserve sharp edges due to its linear interpolation. |
+| **Median Filter**<br>*(Non-Linear)* | <img src="data/processed_annotated/rainy_city_median.jpg" width="250"> | **🏆 Optimal Approach.** Rank-order statistics effectively eradicate "salt-and-pepper" high-frequency rain noise while perfectly maintaining hard geometric boundaries. |
 
 ---
 
-## 🔬 Phase III: Texture & CNN Dynamics (Experiment D, E & F)
+## 🔬 Block 3: Sharpening (Detail Recovery)
+*Applying Unsharp Masking to recover frequencies lost during the smoothing phase.*
 
-### 15. Texture: Highway Gabor (0°)
-![Gabor 0](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/texture_highway_gabor%200.jpg)
-**Conclusion:** Isolates horizontal asphalt textures. Mimics the human visual system's orientation-specific neuron responses.
+<div align="center">
+  <img src="data/processed_annotated/pipeline_2_sharpened_unsharp_mask.jpg" width="600">
+</div>
 
-### 16. Texture: Highway Gabor (Combined)
-![Gabor Combined](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/texture_highway_combined.jpg)
-**Conclusion:** Established a multi-directional texture map. Essential for surface classification and road condition analysis.
-
-### 17. Max Pooling (2x2)
-![Max Pooling](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/pooling_max%20pooling%202x2.jpg)
-**Conclusion:** Structural compression. Successfully retains peak edge activations while reducing data dimensionality by 75%.
-
-### 18. Average Pooling (2x2)
-![Average Pooling](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/pooling_average%20pooling%202x2.jpg)
-**Conclusion:** Signal dilution. The averaging process washes out critical edge gradients, making it inferior to Max Pooling.
-
-### 19. CNN: 1x1 Pointwise Convolution
-![1x1 Conv](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/cnn_conv1x1.jpg)
-**Conclusion:** Feature mixing. Successfully compressed Sobel X and Y channels into a single optimized tensor.
-
-### 20. CNN: Dilated (Atrous) Convolution
-![Dilated Conv](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/cnn_dilated%20convolution.jpg)
-**Conclusion:** Receptive field expansion. Captured larger structural context in the rainy scene without increasing parameters.
+> **💡 Engineering Conclusion:** By subtracting a blurred version of the image from the original (Unsharp Masking), we successfully enhance the high-frequency components of the cars. This non-linear restoration is critical for preparing data for deeper network layers.
 
 ---
 
-## 🔬 Phase IV: Sensitivity Metrics (Experiment G)
+## 🔬 Block 4: Specialized Filters (Texture & Advanced CNNs)
+*Evaluating domain-specific kernels and modern architectural convolution techniques.*
 
-### 21. SAD Difference Map (The ±1 Shift)
-![SAD Difference Map](https://github.com/Dalliya/Vision-Kernels-Analysis/raw/main/data/processed_annotated/metrics_difference%20map.jpg)
-**Conclusion:** Explosive variance. A minor shift from 5 to 6 causes massive signal amplification. This validates why automated gradient descent is the only way to find stable weights.
+### 1. Gabor Filter Bank (Texture & Frequency Analysis)
+| High Contrast (Highway) | Low Contrast (Rainy City) |
+| :---: | :---: |
+| <img src="data/processed_annotated/texture_highway_gabor_bank_combined.jpg" width="400"> | <img src="data/processed_annotated/texture_rainy_gabor_bank_combined.jpg" width="400"> |
+
+> **Conclusion:** The Gabor bank successfully isolates orientation-specific textures (e.g., asphalt grain), functioning similarly to the human visual cortex.
+
+### 2. Architectural Kernels (Dilated & 1x1 Pointwise)
+<div align="center">
+  <img src="data/processed_annotated/cnn_2_dilated_conv_rate2.jpg" width="400">
+  <img src="data/processed_annotated/cnn_1_conv1x1_mixed_edges.jpg" width="400">
+</div>
+
+> **Conclusion:** **Dilated (Atrous) filters** expand the receptive field without increasing computational parameters, capturing broader context. **1x1 Convolutions** successfully mix depthwise feature maps (Sobel X and Y) into a compressed tensor, mimicking MobileNet efficiency.
+
+---
+
+## 🔬 Block 5: Spatial Reduction (Pooling)
+*Simulating CNN dimensionality reduction on extracted feature maps.*
+
+| Original Edges | Max Pooling (2x2) | Average Pooling (2x2) |
+| :---: | :---: | :---: |
+| <img src="data/processed_annotated/pooling_0_original_edges_before_pooling.jpg" width="250"> | <img src="data/processed_annotated/pooling_1_max_pooled_2x2.jpg" width="250"> | <img src="data/processed_annotated/pooling_2_average_pooled_2x2.jpg" width="250"> |
+
+> **💡 Engineering Conclusion:** **Max Pooling** (non-linear) is vastly superior for feature retention, preserving peak edge activations while compressing spatial dimensions. **Average Pooling** (linear) dilutes the signal, resulting in a washed-out feature map.
+
+---
+
+## 🔬 Block 6: Metrics & Sensitivity Analysis (Tasks 7 & 8)
+*Evaluating filter stability by shifting a central kernel parameter by $\pm 1$ ($W_{center}=5 \rightarrow W_{center}=6$).*
+
+<div align="center">
+  <img src="data/processed_annotated/metrics_3_difference_map.jpg" width="600">
+</div>
+
+### 📊 Metric Evaluation: Sum of Absolute Differences (SAD)
+To quantify the impact of parameter shifting, the pixel-wise difference was calculated:
+$$SAD = \sum_{i,j} |I_{Base}(i,j) - I_{Shifted}(i,j)|$$
+
+> **💡 Final Conclusion on Parameter Efficiency:**
+> The SAD metric quantifies a massive pixel-wise divergence caused by a minor $+1$ shift in a $3\times 3$ Sharpening matrix. 
+> 1. Linear high-frequency filters are **highly unstable**; minor manual parameter adjustments cause explosive variance in the output signal.
+> 2. **Project Thesis:** This sensitivity proves why manual crafting of convolutional kernels (Classical CV) is insufficient for complex environments. It validates the necessity of Automated Gradient Descent (Deep Learning) as the only reliable method to discover stable, generalized architectural weights.
 
 ---
 
 ## 👩‍💻 About the Author
-**Dariia Zhdanova** *ML Explorer | Architect of Neural Topology*
+**Dariia Zhdanova** *Computer Vision & Machine Learning Engineer*
 
-"I specialize in deconstructing complex Deep Learning concepts down to their mathematical foundations. I believe that true engineering isn't about calling `model.fit()`, but about understanding the exact geometry of the hyperplanes we build."
-
-"In this study, I transitioned from manual mathematical foundations to automated linear stress-testing, proving that the massive performance gap between structured silhouettes and chaotic satellite textures is the exact point where pure logic demands deeper neural connections."
-
-📫 **Connect with me:**
-* **GitHub:** [@Dalliya](https://github.com/Dalliya)
-* **LinkedIn:** [Dariia Zhdanova](https://www.linkedin.com/in/dariia-z-b7146223a)
+📫 **Connect:** [LinkedIn](https://www.linkedin.com/in/dariia-z-b7146223a) | [GitHub](https://github.com/Dalliya)
