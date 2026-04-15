@@ -114,7 +114,21 @@ $$SAD = \sum_{i,j} |I_{Base}(i,j) - I_{Shifted}(i,j)|$$
 
 ---
 
-## 👩‍💻 About the Author
-**Dariia Zhdanova** *Computer Vision & Machine Learning Engineer*
+---
+<div align="center">
 
-📫 **Connect:** [LinkedIn](https://www.linkedin.com/in/dariia-z-b7146223a) | [GitHub](https://github.com/Dalliya)
+### 👩‍💻 Dariia Zhdanova
+**ML Developer | Architect of Neural Topology**
+
+*I specialize in deconstructing complex Deep Learning concepts down to their mathematical foundations. True engineering isn't about calling `model.fit()`, but about understanding the exact geometry of the hyperplanes we build.*
+
+</div>
+
+**Project Thesis:** "In this study, I transitioned from manual mathematical foundations to automated linear stress-testing. This research proves that the massive performance gap between structured silhouettes and chaotic textures is the exact point where pure logic demands deeper neural connections."
+
+<div align="center">
+<br>
+
+📫 **Connect:** &nbsp; [LinkedIn](https://www.linkedin.com/in/dariia-z-b7146223a) &nbsp;|&nbsp; [GitHub (@Dalliya)](https://github.com/Dalliya)
+
+</div>
