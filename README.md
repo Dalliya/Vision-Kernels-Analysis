@@ -13,13 +13,18 @@
 ---
 </div>
 
-## 📌 Project Overview
-This project serves as a comprehensive empirical study of convolutional filters and their role in feature extraction, noise reduction, and structural topology. Conducted using **OpenCV**, the pipeline systematically evaluates linear and non-linear operators, transitioning from classical mathematical kernels to advanced architectural layers (CNNs).
+## 📌 Executive Summary & Project Architecture
+This research bridges the gap between classical Computer Vision algorithms and modern Deep Learning architectures. By systematically deconstructing convolutional filters using **OpenCV**, this project explores the mathematical foundations of feature extraction, non-linear noise suppression, and spatial dimensionality reduction. 
 
-### 📊 Dataset Characteristics
-To stress-test the kernels, two distinct images were processed. Upon loading, image dimensions and channel configurations were logged, and tensors were reduced to single-channel (grayscale) to isolate structural luminance:
-1. **High-Contrast Image (Clear Highway):** Features strong geometric primitives (lane markers, horizon) and a uniform background.
-2. **Low-Contrast & Noisy Image (Rainy City):** Features complex, clustered details obscured by extreme high-frequency noise (rain streaks).
+The pipeline is designed as an end-to-end analytical framework: transitioning from isolated matrix convolutions (e.g., Sobel, Laplacian) to sequential image restoration pipelines, and ultimately evaluating advanced neural layers (Atrous convolutions, 1x1 Pointwise bottlenecks, and Pooling operations). Furthermore, the study introduces a rigorous mathematical sensitivity analysis, proving the necessity of automated gradient descent by quantifying filter instability through the Sum of Absolute Differences (SAD) metric.
+
+### 📊 Experimental Setup: Dataset Modality & Tensors
+To rigorously stress-test the kernels against real-world variance, two diametrically opposed visual environments were selected. Upon loading, dimensional configurations were logged, and multi-channel RGB arrays were compressed into single-channel (grayscale) 2D tensors. This preprocessing is crucial to isolate structural luminance and eliminate chromatic interference during matrix multiplication.
+
+| Image A: High-Contrast (Clear Highway) | Image B: Low-Contrast & Noisy (Rainy City) |
+| :---: | :---: |
+| <img src="data/raw/clear_highway.jpg" width="400"> | <img src="data/raw/rainy_city.jpg" width="400"> |
+| **Topology:** Features strong, predictable geometric primitives (lane markers, strict horizon) and a uniform background.<br>🎯 *Acts as a baseline for ideal kernel activation.* | **Topology:** Features complex, clustered details severely obscured by extreme high-frequency stochastic noise (rain streaks).<br>🌪️ *Acts as a stress-test for noise-resilient pipelines.* |
 
 ---
 
