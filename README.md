@@ -16,7 +16,7 @@
 ## 📌 Project Overview
 This project serves as a comprehensive empirical study of convolutional filters and their role in feature extraction, noise reduction, and structural topology. Conducted using **OpenCV**, the pipeline systematically evaluates linear and non-linear operators, transitioning from classical mathematical kernels to advanced architectural layers (CNNs).
 
-### 📊 Dataset Characteristics (Tasks 1, 3, 4)
+### 📊 Dataset Characteristics
 To stress-test the kernels, two distinct images were processed. Upon loading, image dimensions and channel configurations were logged, and tensors were reduced to single-channel (grayscale) to isolate structural luminance:
 1. **High-Contrast Image (Clear Highway):** Features strong geometric primitives (lane markers, horizon) and a uniform background.
 2. **Low-Contrast & Noisy Image (Rainy City):** Features complex, clustered details obscured by extreme high-frequency noise (rain streaks).
