@@ -33,9 +33,9 @@ To rigorously stress-test the kernels against real-world driving conditions, two
 
 | Filter Type | High Contrast (Clear Highway) | Low Contrast (Restored Rainy City) |
 | :--- | :---: | :---: |
-| **Sobel X**<br>*(Vertical Edges)* | <img src="data/processed_annotated/clear_highway_sobel_filter_x.jpg" width="400"> | <img src="data/processed_annotated/pipeline_3_edges_sobel_x.jpg" width="400"> |
-| **Prewitt X**<br>*(Harsher Edge Map)* | <img src="data/processed_annotated/clear_highway_prewitt_filter_x.jpg" width="400"> | <img src="data/processed_annotated/pipeline_3_edges_prewitt_x.jpg" width="400"> |
-| **Roberts**<br>*(Diagonal Cross)* | <img src="data/processed_annotated/clear_highway_roberts_filter.jpg" width="400"> | <img src="data/processed_annotated/pipeline_3_edges_roberts.jpg" width="400"> |
+| **Sobel X**<br>*(Vertical Edges)* | <img src="data/processed_annotated/clear_highway_sobel_x-axis.jpg" width="400"> | <img src="data/processed_annotated/pipeline_3_edges_sobel_x.jpg" width="400"> |
+| **Prewitt X**<br>*(Harsher Edge Map)* | <img src="data/processed_annotated/clear_highway_prewitt_x-axis.jpg" width="400"> | <img src="data/processed_annotated/pipeline_3_edges_prewitt_x.jpg" width="400"> |
+| **Roberts**<br>*(Diagonal Cross)* | <img src="data/processed_annotated/clear_highway_roberts_cross_diagonal.jpg" width="400"> | <img src="data/processed_annotated/pipeline_3_edges_roberts.jpg" width="400"> |
 
 > **💡 Engineering Conclusion:** > * **Clear Highway:** Sobel X efficiently isolates vertical obstacles (vehicles, poles) for Time-to-Collision calculations, while Sobel Y (not shown here) excels at horizontal lane marking detection. Roberts acts as a digital scalpel, generating highly precise anchor points for OCR on traffic signs.
 > * **Rainy City:** Raw derivatives fail completely on noisy data (causing "structural blindness"). However, by applying them *after* a median smoothing pipeline, we successfully extract the underlying geometry of the vehicles to prevent forward collisions.
