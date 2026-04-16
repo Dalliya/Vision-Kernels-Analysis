@@ -96,25 +96,32 @@ To rigorously stress-test the kernels against real-world variance, two diametric
 ---
 
 ## 🔬 Block 6: Metrics & Sensitivity Analysis
-*Evaluating filter stability by shifting a central kernel parameter by $\pm 1$ ($W_{center}=5 \rightarrow W_{center}=6$).*
+*Comprehensive stability analysis within the $\pm 1$ parameter range. This experiment quantifies how minor variations in kernel weights affect the stochastic properties of the output signal.*
 
-| Base Kernel (Center Weight = 5) | Shifted Kernel (Center Weight = 6) |
-| :---: | :---: |
-| <img src="data/processed_annotated/metrics_1_base_sharpen_5.jpg" width="400"> | <img src="data/processed_annotated/metrics_2_shifted_sharpen_6.jpg" width="400"> |
+### 🖼️ Parameter Shift Comparison
+| Shift -1 (Weight = 4) | **Base (Weight = 5)** | Shift +1 (Weight = 6) |
+| :---: | :---: | :---: |
+| <img src="data/processed_annotated/metrics_shifted_sharpen_4.jpg" width="260"> | <img src="data/processed_annotated/metrics_1_base_sharpen_5.jpg" width="260"> | <img src="data/processed_annotated/metrics_2_shifted_sharpen_6.jpg" width="260"> |
+| *Signal degradation & Detail loss* | *Optimal feature balance* | *High-frequency noise amplification* |
+
+<br>
 
 <div align="center">
-  <b>Visualizing the Difference (SAD Map)</b><br>
+  <b>Visualizing the Difference (SAD Map: +1 Shift vs Base)</b><br>
   <img src="data/processed_annotated/metrics_3_difference_map.jpg" width="600">
 </div>
 
 ### 📊 Metric Evaluation: Sum of Absolute Differences (SAD)
-To quantify the impact of parameter shifting, the pixel-wise difference was calculated:
+To quantify the impact of these bidirectional shifts, we calculate the pixel-wise divergence from the base state:
+
 $$SAD = \sum_{i,j} |I_{Base}(i,j) - I_{Shifted}(i,j)|$$
 
 > **💡 Final Conclusion on Parameter Efficiency:**
-> The SAD metric quantifies a massive pixel-wise divergence caused by a minor $+1$ shift in a $3\times 3$ Sharpening matrix. 
-> 1. Linear high-frequency filters are **highly unstable**; minor manual parameter adjustments cause explosive variance in the output signal.
-> 2. **Project Thesis:** This sensitivity proves why manual crafting of convolutional kernels (Classical CV) is insufficient for complex environments. It validates the necessity of Automated Gradient Descent (Deep Learning) as the only reliable method to discover stable, generalized architectural weights.
+> The experiment demonstrates that convolutional kernels are hypersensitive to manual weight adjustments:
+> 1. **Shift -1:** Leads to a significant drop in edge activation, effectively "softening" the image beyond the intended sharpening effect and losing critical high-frequency data.
+> 2. **Shift +1:** Results in explosive high-frequency noise amplification (visible in the SAD Difference Map), making the image unstable for subsequent analysis.
+>
+> **Project Thesis:** The massive SAD values recorded for both $+1$ and $-1$ shifts prove why manual crafting of convolutional kernels (Classical CV) is mathematically volatile and non-scalable for complex environments. It validates the necessity of Automated Gradient Descent (Deep Learning) as the only reliable method to discover stable, generalized architectural weights.
 
 
 ---
