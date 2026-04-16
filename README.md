@@ -47,9 +47,9 @@ To rigorously stress-test the kernels against real-world driving conditions, two
 
 | Kernel Operation | Result on Noisy Image (Rainy City) | Analytical Commentary |
 | :--- | :---: | :--- |
-| **Mean Filter**<br>*(Linear Average)* | <img src="data/processed_annotated/rainy_city_mean_filter.jpg" width="250"> | Uniform averaging successfully dilutes rain noise, but aggressively blurs critical structural boundaries (car silhouettes), threatening object detection. |
-| **Gaussian Blur**<br>*(Linear Weighted)* | <img src="data/processed_annotated/rainy_city_gaussian_filter.jpg" width="250"> | Provides a more natural blur by weighting central pixels higher. However, it still fails to isolate the "sharp" stochastic noise of rain droplets. |
-| **Median Filter**<br>*(Non-Linear)* | <img src="data/processed_annotated/rainy_city_median_filter.jpg" width="250"> | **🏆 Optimal Approach.** Rank-order statistics effectively eradicate impulsive rain noise while perfectly maintaining hard geometric boundaries. The gold standard for ADAS pre-processing. |
+| **Mean Filter**<br>*(Linear Average)* | <img src="data/processed_annotated/rainy_city_mean_filter_5x5.jpg" width="250"> | Uniform averaging successfully dilutes rain noise, but aggressively blurs critical structural boundaries (car silhouettes), threatening object detection. |
+| **Gaussian Blur**<br>*(Linear Weighted)* | <img src="data/processed_annotated/rainy_city_gaussian_filter_3x3.jpg" width="250"> | Provides a more natural blur by weighting central pixels higher. However, it still fails to isolate the "sharp" stochastic noise of rain droplets. |
+| **Median Filter**<br>*(Non-Linear)* | <img src="data/processed_annotated/rainy_city_median_filter_5x5.jpg" width="250"> | **🏆 Optimal Approach.** Rank-order statistics effectively eradicate impulsive rain noise while perfectly maintaining hard geometric boundaries. The gold standard for ADAS pre-processing. |
 
 ---
 
