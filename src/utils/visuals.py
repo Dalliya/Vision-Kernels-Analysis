@@ -85,11 +85,11 @@ def annotate_image(img_tensor: np.ndarray, title: str) -> np.ndarray:
 
     # 4. DYNAMIC TEXT WRAPPING & HEIGHT CALCULATION (The Fix)
     char_width_px = 8.5 
-    # Защита от очень узких картинок
+    # Protection against extremely narrow images
     wrap_w = max(15, int((w - 40) / char_width_px))
     lines = textwrap.wrap(description, width=wrap_w)
     
-    # Высота плашки = Отступ заголовка (45) + (Кол-во строк * 20) + Отступ снизу (15)
+    # Panel height = Title padding (45) + (Number of lines * 20) + Bottom padding (15)
     bar_height = 45 + (len(lines) * 20) + 15
     total_height = h + bar_height
     

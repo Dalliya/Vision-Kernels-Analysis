@@ -44,11 +44,20 @@ def run_pipeline(cfg: Config) -> None:
     # EXPERIMENT B: Smoothing
     # =========================================================================
     print("[SYSTEM] Processing Experiment B...")
-    results_b = run_smoothing_experiment(tensor_low_contrast)
-    for filter_name, img_tensor in results_b:
+    
+    # 1. Processing Low Contrast (Rainy City)
+    results_b_low = run_smoothing_experiment(tensor_low_contrast)
+    for filter_name, img_tensor in results_b_low:
         annotated = annotate_image(img_tensor, filter_name)
         safe_name = filter_name.lower().replace(" ", "_").replace("(", "").replace(")", "")
         cv2.imwrite(os.path.join(output_dir, f"rainy_city_{safe_name}.jpg"), annotated)
+        
+    # 2. Processing High Contrast (Clear Highway)
+    results_b_high = run_smoothing_experiment(tensor_high_contrast)
+    for filter_name, img_tensor in results_b_high:
+        annotated = annotate_image(img_tensor, filter_name)
+        safe_name = filter_name.lower().replace(" ", "_").replace("(", "").replace(")", "")
+        cv2.imwrite(os.path.join(output_dir, f"clear_highway_{safe_name}.jpg"), annotated)
 
     # =========================================================================
     # EXPERIMENT C: Sequential Pipeline
@@ -78,28 +87,52 @@ def run_pipeline(cfg: Config) -> None:
     # EXPERIMENT E: Pooling
     # =========================================================================
     print("[SYSTEM] Running Spatial Reduction (Pooling)...")
-    results_e = run_pooling_experiment(tensor_low_contrast)
-    for filter_name, img_tensor in results_e:
+    
+    # 1. Processing High Contrast (Clear Highway)
+    results_e_high = run_pooling_experiment(tensor_high_contrast)
+    for filter_name, img_tensor in results_e_high:
         annotated = annotate_image(img_tensor, filter_name)
-        cv2.imwrite(os.path.join(output_dir, f"pooling_{filter_name.lower()}.jpg"), annotated)
+        cv2.imwrite(os.path.join(output_dir, f"pooling_highway_{filter_name.lower()}.jpg"), annotated)
+        
+    # 2. Processing Low Contrast (Rainy City)
+    results_e_low = run_pooling_experiment(tensor_low_contrast)
+    for filter_name, img_tensor in results_e_low:
+        annotated = annotate_image(img_tensor, filter_name)
+        cv2.imwrite(os.path.join(output_dir, f"pooling_rainy_{filter_name.lower()}.jpg"), annotated)
 
     # =========================================================================
     # EXPERIMENT F: Advanced CNN Layers
     # =========================================================================
     print("[SYSTEM] Running Advanced CNN Architectural Layers...")
-    results_f = run_advanced_cnn_experiment(tensor_high_contrast)
-    for filter_name, img_tensor in results_f:
+    
+    # 1. Processing High Contrast (Clear Highway)
+    results_f_high = run_advanced_cnn_experiment(tensor_high_contrast)
+    for filter_name, img_tensor in results_f_high:
         annotated = annotate_image(img_tensor, filter_name)
-        cv2.imwrite(os.path.join(output_dir, f"cnn_{filter_name.lower()}.jpg"), annotated)
+        cv2.imwrite(os.path.join(output_dir, f"cnn_highway_{filter_name.lower()}.jpg"), annotated)
+
+    # 2. Processing Low Contrast (Rainy City)
+    results_f_low = run_advanced_cnn_experiment(tensor_low_contrast)
+    for filter_name, img_tensor in results_f_low:
+        annotated = annotate_image(img_tensor, filter_name)
+        cv2.imwrite(os.path.join(output_dir, f"cnn_rainy_{filter_name.lower()}.jpg"), annotated)
 
     # =========================================================================
     # EXPERIMENT G: Parameter Sensitivity & SAD Metrics
     # =========================================================================
     print("[SYSTEM] Running Sensitivity Analysis (Metrics)...")
-    results_g = run_metrics_and_parameter_shift(tensor_low_contrast)
-    for filter_name, img_tensor in results_g:
+    
+    # 1. Processing High Contrast (Clear Highway)
+    results_g_high = run_metrics_and_parameter_shift(tensor_high_contrast)
+    for filter_name, img_tensor in results_g_high:
         annotated = annotate_image(img_tensor, filter_name)
-        cv2.imwrite(os.path.join(output_dir, f"metrics_{filter_name.lower()}.jpg"), annotated)
+        cv2.imwrite(os.path.join(output_dir, f"metrics_highway_{filter_name.lower()}.jpg"), annotated)
+
+    # 2. Processing Low Contrast (Rainy City)
+    results_g_low = run_metrics_and_parameter_shift(tensor_low_contrast)
+    for filter_name, img_tensor in results_g_low:
+        annotated = annotate_image(img_tensor, filter_name)
+        cv2.imwrite(os.path.join(output_dir, f"metrics_rainy_{filter_name.lower()}.jpg"), annotated)
 
     # =========================================================================
     # PIPELINE COMPLETE

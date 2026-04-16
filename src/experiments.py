@@ -49,6 +49,7 @@ def run_smoothing_experiment(image_tensor: np.ndarray) -> List[Tuple[str, np.nda
     """
     EXPERIMENT B: Isolated Smoothing.
     Evaluates noise reduction techniques (linear vs non-linear).
+    NOTE: Designed to process any input tensor (e.g., both Highway and Rainy City).
     """
     print("[EXPERIMENT] Running Smoothing (Noise Reduction) kernels...")
     filters = [MeanFilter(kernel_size=5), GaussianFilter(), MedianFilter(kernel_size=5)]
