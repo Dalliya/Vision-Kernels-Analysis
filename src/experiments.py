@@ -31,7 +31,6 @@ def run_edge_detection_experiment(image_tensor: np.ndarray) -> List[Tuple[str, n
     """
     print("[EXPERIMENT] Running Edge Detection kernels...")
     
-    # ИСПРАВЛЕНО: Добавлены Prewitt и Roberts для корректного запуска на всех картинках!
     filters = [
         SobelFilterX(), 
         SobelFilterY(), 
@@ -183,9 +182,9 @@ def run_advanced_cnn_experiment(image_tensor: np.ndarray) -> List[Tuple[str, np.
 # =============================================================================
 
 class CustomSharpen(BaseKernelFilter):
-    """A flexible sharpen filter to test parameter shifts (+-1)."""
+    """A flexible sharpen filter used to evaluate parameter sensitivity (±1 shift)."""
     def __init__(self, center_weight: float):
-        # We change the central pixel weight
+        # Dynamically define the kernel by adjusting the central pixel weight
         kernel = np.array([
             [0, -1, 0], 
             [-1, center_weight, -1], 
@@ -196,38 +195,47 @@ class CustomSharpen(BaseKernelFilter):
 def run_metrics_and_parameter_shift(image_tensor: np.ndarray) -> List[Tuple[str, np.ndarray]]:
     """
     EXPERIMENT G: Parameter Shift & Mathematical Metrics.
-    Fulfills the requirement to change a parameter by +-1 and calculate
-    the pixel-wise sum of differences to evaluate filter sensitivity.
+    Evaluates filter sensitivity by shifting a central parameter by ±1 
+    and calculating the pixel-wise Sum of Absolute Differences (SAD).
     """
-    print("\n[EXPERIMENT] Running Parameter Shift (+-1) and Metrics...")
+    print("\n[EXPERIMENT] Running Parameter Shift (±1) and Sensitivity Metrics...")
     results = []
     
-    # 1. Base Filter (Center weight = 5)
-    print("   -> Applying Base Filter (Center = 5)...")
+    # 1. Shifted Filter -1 (Center weight = 4)
+    print("   -> Applying Shifted Filter (Center = 4, decreased by 1)...")
+    filter_minus = CustomSharpen(center_weight=4)
+    img_minus = filter_minus.apply(image_tensor)
+    results.append(("shifted_sharpen_4", img_minus))
+    
+    # 2. Base Filter (Center weight = 5)
+    print("   -> Applying Base Filter (Baseline, Center = 5)...")
     filter_base = CustomSharpen(center_weight=5)
     img_base = filter_base.apply(image_tensor)
-    results.append(("1_Base_Sharpen_5", img_base))
+    results.append(("1_base_sharpen_5", img_base))
     
-    # 2. Shifted Filter (Center weight = 6, i.e., +1)
-    print("   -> Applying Shifted Filter (Center = 6, changed by +1)...")
-    filter_shifted = CustomSharpen(center_weight=6)
-    img_shifted = filter_shifted.apply(image_tensor)
-    results.append(("2_Shifted_Sharpen_6", img_shifted))
+    # 3. Shifted Filter +1 (Center weight = 6)
+    print("   -> Applying Shifted Filter (Center = 6, increased by 1)...")
+    filter_plus = CustomSharpen(center_weight=6)
+    img_plus = filter_plus.apply(image_tensor)
+    results.append(("2_shifted_sharpen_6", img_plus))
     
-    # 3. CALCULATE METRIC: Pixel-wise sum of absolute differences
-    # We use float32 to prevent overflow during subtraction
-    diff_tensor = np.abs(img_base.astype(np.float32) - img_shifted.astype(np.float32))
-    total_difference = np.sum(diff_tensor)
+    # 4. METRIC CALCULATION: Sum of Absolute Differences (SAD)
+    # Compare both -1 and +1 shifts against the baseline image
+    diff_minus = np.abs(img_base.astype(np.float32) - img_minus.astype(np.float32))
+    diff_plus = np.abs(img_base.astype(np.float32) - img_plus.astype(np.float32))
+    
+    total_diff_minus = np.sum(diff_minus)
+    total_diff_plus = np.sum(diff_plus)
     
     print("-" * 50)
-    print(f"   [METRIC RESULT] Total Pixel-wise Difference: {total_difference:,.0f}")
-    print("   [CONCLUSION] A change of +1 in the central weight drastically amplifies")
-    print("   high-frequency signals (edges), proving that linear filters are highly")
-    print("   sensitive to central parameters.")
+    print(f"   [METRIC -1] Total Pixel-wise Difference (Base vs 4): {total_diff_minus:,.0f}")
+    print(f"   [METRIC +1] Total Pixel-wise Difference (Base vs 6): {total_diff_plus:,.0f}")
+    print("   [CONCLUSION] Massive SAD values prove the hypersensitivity of linear filters.")
     print("-" * 50)
     
-    # Save the absolute difference as a heatmap/image to show exactly WHAT changed
-    diff_normalized = np.clip(diff_tensor, 0, 255).astype(np.uint8)
-    results.append(("3_Difference_Map", diff_normalized))
+    # 5. Generate and save the Difference Map (for README visualization)
+    diff_normalized = np.clip(diff_plus, 0, 255).astype(np.uint8)
+    results.append(("3_difference_map", diff_normalized))
     
+    # CRITICAL: Return the collected results to the main pipeline runner
     return results
