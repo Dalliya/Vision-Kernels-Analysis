@@ -96,7 +96,7 @@ To rigorously stress-test the kernels against real-world driving conditions, two
 ---
 
 ## 🔬 Block 6: Metrics & Sensitivity Analysis (Safety Critical Test)
-*Comprehensive stability analysis within the $\pm 1$ parameter range. This experiment quantifies how minor variations in hard-coded kernel weights affect the safety of the output signal.*
+*Comprehensive stability analysis within the ±1 parameter range. This experiment quantifies how minor variations in hard-coded kernel weights affect the safety of the output signal.*
 
 ### 🖼️ Parameter Shift Comparison (Rainy City)
 | Shift -1 (Weight = 4) | **Base (Weight = 5)** | Shift +1 (Weight = 6) |
