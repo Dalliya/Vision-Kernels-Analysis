@@ -81,10 +81,12 @@ def run_sequential_pipeline(image_tensor: np.ndarray) -> List[Tuple[str, np.ndar
     # Step 3: Extract final features from the restored image
     print("   -> Step 3: Applying Edge Detectors on the restored image")
     sobel_x = SobelFilterX()
+    sobel_y = SobelFilterY()
     prewitt_x = PrewittFilterX()
     roberts = RobertsFilter()
     
     results.append(("3_Edges_Sobel_X", sobel_x.apply(sharpened_img)))
+    results.append(("3_Edges_Sobel_Y", sobel_y.apply(sharpened_img)))
     results.append(("3_Edges_Prewitt_X", prewitt_x.apply(sharpened_img)))
     results.append(("3_Edges_Roberts", roberts.apply(sharpened_img)))
     
