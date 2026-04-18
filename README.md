@@ -59,15 +59,34 @@ Employing a microscopic 2x2 matrix, this filter calculates diagonal spatial deri
 
 ---
 
+---
+
 ## 🔬 Block 2: Smoothing & Blurring (Noise Reduction)
-*Analyzing linear vs. non-linear spatial filters to process the highly noisy Rainy City tensor before passing it to the autonomous navigation stack.*
+*Analyzing linear vs. non-linear spatial filters to process sensor data in diametrically opposed driving conditions (Ideal Baseline vs. Stochastic Stress-Test).*
 
-| Kernel Operation | Result on Noisy Image (Rainy City) | Analytical Commentary |
-| :--- | :---: | :--- |
-| **Mean Filter**<br>*(Linear Average)* | <img src="data/processed_annotated/rainy_city_mean_filter_5x5.jpg" width="250"> | Uniform averaging successfully dilutes rain noise, but aggressively blurs critical structural boundaries (car silhouettes), threatening object detection. |
-| **Gaussian Blur**<br>*(Linear Weighted)* | <img src="data/processed_annotated/rainy_city_gaussian_filter_3x3.jpg" width="250"> | Provides a more natural blur by weighting central pixels higher. However, it still fails to isolate the "sharp" stochastic noise of rain droplets. |
-| **Median Filter**<br>*(Non-Linear)* | <img src="data/processed_annotated/rainy_city_median_filter_5x5.jpg" width="250"> | **🏆 Optimal Approach.** Rank-order statistics effectively eradicate impulsive rain noise while perfectly maintaining hard geometric boundaries. The gold standard for ADAS pre-processing. |
+| Kernel Operation | High Contrast (Clear Highway) | Low Contrast (Rainy City) | Analytical Commentary |
+| :--- | :---: | :---: | :--- |
+| **Mean Filter**<br>*(Linear Average)* | <img src="data/processed_annotated/clear_highway_mean_filter.jpg" width="300"> | <img src="data/processed_annotated/rainy_city_mean_filter_5x5.jpg" width="300"> | **Rejected for ADAS.** Linear averaging acts as a low-pass frequency eraser. While it "dissolves" rain streaks, it simultaneously erodes the high-frequency structural data of objects. Losing edge sharpness is equivalent to losing the object itself in the navigation stack. |
+| **Gaussian Blur**<br>*(Linear Weighted)* | <img src="data/processed_annotated/clear_highway_gaussian_filter.jpg" width="300"> | <img src="data/processed_annotated/rainy_city_gaussian_filter_3x3.jpg" width="300"> | **Weighted Smoothing.** Provides a natural distribution, concentrating on the central pixel. Excellent for reducing sensor white noise on a highway, but mathematically insufficient to isolate sharp impulsive noise like rain streaks or lens glare. |
+| **Median Filter**<br>*(Non-Linear)* | <img src="data/processed_annotated/clear_highway_median_filter.jpg" width="300"> | <img src="data/processed_annotated/rainy_city_median_filter_5x5.jpg" width="300"> | **🏆 Optimal ADAS Solution.** Unlike averaging, this kernel uses rank statistics. By selecting the median value, it treats rain droplets as outliers and effectively eradicates them while **perfectly maintaining mathematical edge sharpness**. This "Edge-Preserving" property is the industry standard for low-visibility pre-processing. |
 
+### 🧠 Deep Comparative Analysis: Linear Pitfalls vs. Non-Linear Resilience
+
+In a professional computer vision pipeline for autonomous vehicles, noise suppression is the critical stage before feature extraction. My experiment reveals a fundamental divergence between mathematical approaches:
+
+**1. The "Structural Erosion" Problem (Clear Highway)**
+On the *Clear Highway*, noise is minimal, but structural precision is vital for **Lane Keeping Assist (LKA)**. 
+* **Linear Failure:** Mean and Gaussian filters blur the boundaries of lane markings and the horizon. In a high-speed scenario, this loss of precision can lead to lateral drift errors.
+* **Non-Linear Precision:** The Median filter preserves the exact pixel-perfect edges of the highway markers, proving that even in "clean" conditions, non-linear processing provides superior data for geometry-based navigation.
+
+**2. Stochastic Noise Overload (Rainy City)**
+In the *Rainy City* scenario, the sensor is bombarded with high-frequency impulsive noise (rain streaks).
+* **The "Ghosting" Effect:** Linear filters attempt to "average out" the rain, but they end up creating a "ghostly" blur where the car silhouettes dissolve into the background. For an autopilot, this creates a **False Negative** risk — a car is physically there, but its mathematical signature is too weak to trigger a braking response.
+* **The Outlier Elimination:** The Median filter treats every rain streak as a mathematical outlier. Since rain occupies a small portion of the 5x5 local window compared to the solid object (the car), the rank-order statistic effectively "deletes" the rain from the frame, restoring a clear view of the urban obstacles.
+
+> **💡 Engineering Conclusion:** > The **Median Filter** is the definitive winner for ADAS applications. Its ability to maintain structural integrity while eradicating stochastic noise makes it the primary tool for "weather-proofing" an autopilot's vision. My research proves that **Edge-Preserving Smoothing** is not just an aesthetic choice, but a safety-critical requirement for autonomous navigation.
+
+---
 ---
 
 ## 🔬 Block 3: Sharpening (Detail Recovery)
