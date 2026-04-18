@@ -172,10 +172,25 @@ In a night-time rain scenario, the asphalt's texture is violently corrupted by g
 ## 🔬 Block 5: Modern CNN Architectural Primitives
 *Simulating the advanced spatial operators used in state-of-the-art neural architectures (MobileNet, DeepLab) to achieve real-time inference on autonomous vehicle hardware.*
 
-| CNN Layer & Technical Analysis | High Contrast (Clear Highway) | Low Contrast (Rainy City) |
-| :--- | :---: | :---: |
-| **1x1 Pointwise Convolution**<br>*(Cross-Channel Feature Fusion)*<br><br>**Mathematical Logic:** While standard kernels filter spatial data, the 1x1 kernel acts as a **dimensionality compressor**. In this experiment, I fused the multi-channel feature map (Sobel X and Sobel Y) into a single optimized tensor. This forces the network to learn a "weighted importance" for each gradient axis.<br><br>🎯 **ADAS Impact:** This is the core secret behind **MobileNet** efficiency. By mixing channels with zero spatial overhead, we reduce the computational footprint by up to 90%. In self-driving terms, this allows the vehicle to process 60+ FPS (frames per second) on an embedded GPU, ensuring zero-latency reaction times. | <img src="data/processed_annotated/cnn_highway_1_conv1x1_mixed_edges.jpg" width="500"> | <img src="data/processed_annotated/cnn_rainy_1_conv1x1_mixed_edges.jpg" width="500"> |
-| **Dilated (Atrous) Convolution**<br>*(Global Receptive Field Expansion)*<br><br>**Mathematical Logic:** By introducing "holes" (dilation rate > 1) between kernel weights, we exponentially increase the **Receptive Field** without adding a single extra parameter or multiplication. The filter "skips" pixels to see the broader geometric context.<br><br>🎯 **ADAS Impact:** Essential for **Semantic Segmentation** (DeepLab). A standard filter is "short-sighted"—it might classify a large grey area as a "wall". A Dilated filter sees the entire silhouette, allowing the AI to correctly identify a massive semi-trailer. This prevents the autopilot from miscalculating the distance to oversized obstacles in complex urban environments. | <img src="data/processed_annotated/cnn_highway_2_dilated_conv_rate2.jpg" width="500"> | <img src="data/processed_annotated/cnn_rainy_2_dilated_conv_rate2.jpg" width="500"> |
+### 1. 1x1 Pointwise Convolution *(Cross-Channel Feature Fusion)*
+| High Contrast (Clear Highway) | Low Contrast (Rainy City) |
+| :---: | :---: |
+| <img src="data/processed_annotated/cnn_highway_1_conv1x1_mixed_edges.jpg" width="450"> | <img src="data/processed_annotated/cnn_rainy_1_conv1x1_mixed_edges.jpg" width="450"> |
+
+> **Mathematical Logic:** While standard kernels filter spatial data, the 1x1 kernel acts as a **dimensionality compressor**. In this experiment, I fused the multi-channel feature map (Sobel X and Sobel Y) into a single optimized tensor. This forces the network to learn a "weighted importance" for each gradient axis.
+> 
+> 🎯 **ADAS Impact:** This is the core secret behind **MobileNet** efficiency. By mixing channels with zero spatial overhead, we reduce the computational footprint by up to 90%. In self-driving terms, this allows the vehicle to process 60+ FPS (frames per second) on an embedded GPU, ensuring zero-latency reaction times.
+
+<br>
+
+### 2. Dilated (Atrous) Convolution *(Global Receptive Field Expansion)*
+| High Contrast (Clear Highway) | Low Contrast (Rainy City) |
+| :---: | :---: |
+| <img src="data/processed_annotated/cnn_highway_2_dilated_conv_rate2.jpg" width="450"> | <img src="data/processed_annotated/cnn_rainy_2_dilated_conv_rate2.jpg" width="450"> |
+
+> **Mathematical Logic:** By introducing "holes" (dilation rate > 1) between kernel weights, we exponentially increase the **Receptive Field** without adding a single extra parameter or multiplication. The filter "skips" pixels to see the broader geometric context.
+> 
+> 🎯 **ADAS Impact:** Essential for **Semantic Segmentation** (DeepLab). A standard filter is "short-sighted"—it might classify a large grey area as a "wall". A Dilated filter sees the entire silhouette, allowing the AI to correctly identify a massive semi-trailer. This prevents the autopilot from miscalculating the distance to oversized obstacles in complex urban environments.
 
 ### 🧠 Deep Architectural Summary
 Unlike classical filters that are hard-coded for one specific task, these CNN primitives are designed for **Adaptive Optimization**:
