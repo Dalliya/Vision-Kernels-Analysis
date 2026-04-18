@@ -37,8 +37,25 @@ To rigorously stress-test the kernels against real-world driving conditions, two
 | **Prewitt X**<br>*(Harsher Edge Map)* | <img src="data/processed_annotated/clear_highway_prewitt_x-axis.jpg" width="400"> | <img src="data/processed_annotated/pipeline_3_edges_prewitt_x.jpg" width="400"> |
 | **Roberts**<br>*(Diagonal Cross)* | <img src="data/processed_annotated/clear_highway_roberts_cross_diagonal.jpg" width="400"> | <img src="data/processed_annotated/pipeline_3_edges_roberts.jpg" width="400"> |
 
-> **💡 Engineering Conclusion:** > * **Clear Highway:** Sobel X efficiently isolates vertical obstacles (vehicles, poles) for Time-to-Collision calculations, while Sobel Y (not shown here) excels at horizontal lane marking detection. Roberts acts as a digital scalpel, generating highly precise anchor points for OCR on traffic signs.
-> * **Rainy City:** Raw derivatives fail completely on noisy data (causing "structural blindness"). However, by applying them *after* a median smoothing pipeline, we successfully extract the underlying geometry of the vehicles to prevent forward collisions.
+### 🧠 Deep Mathematical & ADAS Analysis
+
+**1. Sobel Operator (Spatial Semantic Decomposition)**
+In autonomous driving, splitting gradients into X and Y axes is not just a mathematical formality; it is a fundamental spatial decomposition for two distinct safety systems:
+* **Sobel X (Collision Avoidance):** Scans for horizontal changes in luminance to isolate vertical boundaries (e.g., vehicle sides, poles). On the *Clear Highway*, it flawlessly extracted the leading car's geometry, providing critical data for **Time-to-Collision (TTC)** calculations. However, in the *Rainy City*, the filter suffers from "structural blindness," generating thousands of false micro-gradients from rain streaks.
+* **Sobel Y (Lane Keeping Assist):** Scans vertical changes to analyze the drivable surface. In ideal conditions, it perfectly extracts lane markings and the horizon line, which are essential for centering the vehicle's motion vector.
+
+**2. Prewitt Filter (Hard-Edge Structural Mapping)**
+Unlike Sobel, the Prewitt operator utilizes a uniform weight matrix (lacking central pixel amplification). This makes its edge response much "harsher" but strips away any natural noise resistance.
+* **Clear Highway:** Acts as a high-precision structural scanner. It provides aggressive, high-contrast boundaries ideal for generating millimeter-accurate **Bounding Boxes** around obstacles.
+* **Rainy City:** The lack of built-in weight smoothing plays a fatal role. Prewitt hyperbolizes residual high-frequency rain noise, causing the vehicle's silhouette to dissolve into a chaotic texture. In engineering terms, this causes **Algorithm Noise Overload**, leading to a complete failure of the detection system.
+
+**3. Roberts Cross (High-Frequency Localization)**
+Employing a microscopic 2x2 matrix, this filter calculates diagonal spatial derivatives. It offers extreme spatial localization but lacks mathematical noise-smoothing mechanisms entirely.
+* **Clear Highway:** Acts as a "digital scalpel." Instead of thick lines, it pinpoints sharp corners and geometric intersections. These isolated activations serve as **Anchor Points** for 3D model alignment and Optical Character Recognition (OCR) on traffic signs.
+* **Rainy City:** The linear logic of a 2x2 matrix collapses under stochastic noise. The filter reacts to every micro-fluctuation (droplets, lens glare, sensor noise), scattering the image into a "starry sky" of isolated pixels. For an autopilot, this is the most dangerous scenario, directly triggering **Phantom Braking** as the system falsely detects thousands of micro-obstacles.
+
+> **💡 Engineering Conclusion for Feature Extraction:**
+> Classical derivative kernels perfectly demonstrate the engineering trade-off between edge sharpness and signal robustness. While matrices like Prewitt and Roberts are excellent for laboratory conditions and OCR, their hard-coded linear nature makes them mathematically volatile in stochastic environments. Safe real-world navigation requires dynamic scaling of the receptive field—proving why modern ADAS relies on Convolutional Neural Networks (CNNs) to dynamically adapt weights rather than relying on static differential math.
 
 ---
 
