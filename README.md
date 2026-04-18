@@ -191,31 +191,47 @@ A self-driving car must identify a hazard whether it is shifted 2 pixels to the 
 
 ---
 
-## 🔬 Block 6: Metrics & Sensitivity Analysis (Safety Critical Test)
-*Comprehensive stability analysis within the ±1 parameter range. This experiment quantifies how minor variations in hard-coded kernel weights affect the safety of the output signal.*
+---
 
-### 🖼️ Parameter Shift Comparison (Rainy City)
+## 🔬 Block 7: Parameter Sensitivity & SAD Metrics (The Volatility Test)
+*A rigorous stress-test of linear kernel robustness. Quantifying how a micro-shift of ±1 in weight tuning leads to catastrophic failure in autonomous perception.*
+
+### 🛠️ The Experiment: Manual Weight Instability
+In this stage, I simulated the "human error" of manual filter tuning. By shifting the central weight of the Sharpening filter from its base (**W=5**) to **W=4** (-1 shift) and **W=6** (+1 shift), I measured the mathematical divergence using the **SAD (Sum of Absolute Differences)** metric.
+
+#### 📊 Scenario A: Clear Highway (Signal Degradation)
 | Shift -1 (Weight = 4) | **Base (Weight = 5)** | Shift +1 (Weight = 6) |
 | :---: | :---: | :---: |
-| <img src="data/processed_annotated/metrics_rainy_shifted_sharpen_4.jpg" width="260"> | <img src="data/processed_annotated/metrics_rainy_1_base_sharpen_5.jpg" width="260"> | <img src="data/processed_annotated/metrics_rainy_2_shifted_sharpen_6.jpg" width="260"> |
-| *Signal degradation & "Structural Blindness"* | *Optimal feature balance* | *Phantom Braking risk (Noise explosion)* |
+| <img src="data/processed_annotated/metrics_highway_shifted_sharpen_4.jpg" width="350"> | <img src="data/processed_annotated/metrics_highway_1_base_sharpen_5.jpg" width="350"> | <img src="data/processed_annotated/metrics_highway_2_shifted_sharpen_6.jpg" width="350"> |
+| **Feature Softening:** Critical loss of edge sharpness on lane markings. Increases the risk of **Lateral Drift** due to blurred geometric anchors. | **Optimal Calibration:** Balanced contrast for stable lane-keeping and obstacle localization. | **Over-Sharpening:** Excessive contrast creates "halo" artifacts around signs, potentially confusing OCR algorithms. |
 
-<br>
+#### 📊 Scenario B: Rainy City (Noise Explosion)
+| Shift -1 (Weight = 4) | **Base (Weight = 5)** | Shift +1 (Weight = 6) |
+| :---: | :---: | :---: |
+| <img src="data/processed_annotated/metrics_rainy_shifted_sharpen_4.jpg" width="350"> | <img src="data/processed_annotated/metrics_rainy_1_base_sharpen_5.jpg" width="350"> | <img src="data/processed_annotated/metrics_rainy_2_shifted_sharpen_6.jpg" width="350"> |
+| **"Structural Blindness":** The image becomes artificially softened. The autopilot loses high-frequency data of distant pedestrians and obstacles. | **Safety Equilibrium:** Effectively restores object silhouettes without amplifying the surrounding rain noise. | **"Phantom Braking" Risk:** Explosive amplification of rain droplets. The system creates a chaotic "noise mesh" that the AI may misinterpret as solid obstacles. |
 
-<div align="center">
-  <b>Visualizing the Difference (SAD Map: +1 Shift vs Base)</b><br>
-  <img src="data/processed_annotated/metrics_rainy_3_difference_map.jpg" width="600">
-</div>
+---
 
-### 📊 Metric Evaluation: Sum of Absolute Differences (SAD)
-To quantify the impact of these bidirectional shifts, we calculate the pixel-wise divergence from the base state:
+### 🧠 Deep Mathematical Analysis of SAD Topology
+
+To quantify the impact of these shifts, we use the **Sum of Absolute Differences (SAD)**, which measures the pixel-wise cumulative error:
 
 $$SAD = \sum_{i,j} |I_{Base}(i,j) - I_{Shifted}(i,j)|$$
 
-> **💡 Final Conclusion on Parameter Efficiency:**
-> The experiment demonstrates that convolutional kernels are hypersensitive to manual weight adjustments:
-> 1. **Shift -1:** Leads to a significant drop in edge activation. In real-world conditions, the autopilot simply "won't see" thin objects like pedestrians or distant traffic signs.
-> 2. **Shift +1:** Results in explosive high-frequency noise amplification (visible in the SAD Difference Map). Radar and cameras would transmit thousands of false micro-obstacles, triggering a dangerous Phantom Braking scenario.
+<div align="center">
+  <b>Visualizing the Divergence (SAD Map: +1 Shift vs Base)</b><br>
+  <img src="data/processed_annotated/metrics_rainy_3_difference_map.jpg" width="750">
+  <br>
+  <i><b>Analysis:</b> The SAD Map proves that the error is not localized; a micro-shift in a single kernel weight propagates through the entire spatial tensor, corrupting the global feature topology.</i>
+</div>
+
+#### 📝 Key Engineering Findings:
+1. **Bidirectional Instability:** A shift of only **±20%** in a single parameter (from 5 to 4 or 6) leads to a total signal transformation. In a safety-critical system, this volatility is unacceptable.
+2. **Environmental Sensitivity:** The same shift in a "Clear" environment causes minor data loss, but in a "Rainy" environment, it causes a **Signal-to-Noise Ratio (SNR) collapse**.
+3. **The Manual Tuning Paradox:** This experiment proves that "hard-coding" vision is a dead end. An engineer cannot manually calibrate a matrix that is robust enough to handle the infinite variance of real-world weather and lighting.
+
+---
 >
 > **Project Thesis:** The massive SAD values recorded for both $+1$ and $-1$ shifts mathematically prove why manual crafting of convolutional kernels (Classical CV) is volatile and completely non-scalable for Safety-Critical Systems. It validates the industry's transition to **Deep Learning (CNNs)**, where neural weights are not hard-coded, but dynamically optimized via Gradient Descent to find the most stable local minima for any weather condition.
 
