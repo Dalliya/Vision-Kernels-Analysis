@@ -64,11 +64,31 @@ Employing a microscopic 2x2 matrix, this filter calculates diagonal spatial deri
 ## 🔬 Block 2: Smoothing & Blurring (Noise Reduction)
 *Analyzing linear vs. non-linear spatial filters to process sensor data in diametrically opposed driving conditions (Ideal Baseline vs. Stochastic Stress-Test).*
 
-| Kernel Operation & Analytical Commentary | High Contrast (Clear Highway) | Low Contrast (Rainy City) |
-| :--- | :---: | :---: |
-| **Mean Filter**<br>*(Linear Average)*<br><br>**Rejected for ADAS.** Linear averaging acts as a low-pass frequency eraser. While it "dissolves" rain streaks, it simultaneously erodes the high-frequency structural data of objects. Losing edge sharpness is equivalent to losing the object itself in the navigation stack. | <img src="data/processed_annotated/clear_highway_mean_filter_5x5.jpg" width="500"> | <img src="data/processed_annotated/rainy_city_mean_filter_5x5.jpg" width="500"> |
-| **Gaussian Blur**<br>*(Linear Weighted)*<br><br>**Weighted Smoothing.** Provides a natural distribution, concentrating on the central pixel. Excellent for reducing sensor white noise on a highway, but mathematically insufficient to isolate sharp impulsive noise like rain streaks or lens glare. | <img src="data/processed_annotated/clear_highway_gaussian_filter_3x3.jpg" width="500"> | <img src="data/processed_annotated/rainy_city_gaussian_filter_3x3.jpg" width="500"> |
-| **Median Filter**<br>*(Non-Linear)*<br><br>**🏆 Optimal ADAS Solution.** Unlike averaging, this kernel uses rank statistics. By selecting the median value, it treats rain droplets as outliers and effectively eradicates them while **perfectly maintaining mathematical edge sharpness**. This "Edge-Preserving" property is the industry standard for low-visibility pre-processing. | <img src="data/processed_annotated/clear_highway_median_filter_5x5.jpg" width="500"> | <img src="data/processed_annotated/rainy_city_median_filter_5x5.jpg" width="500"> |
+### 1. Mean Filter *(Linear Average)*
+| High Contrast (Clear Highway) | Low Contrast (Rainy City) |
+| :---: | :---: |
+| <img src="data/processed_annotated/clear_highway_mean_filter_5x5.jpg" width="450"> | <img src="data/processed_annotated/rainy_city_mean_filter_5x5.jpg" width="450"> |
+
+> **Rejected for ADAS.** Linear averaging acts as a low-pass frequency eraser. While it "dissolves" rain streaks, it simultaneously erodes the high-frequency structural data of objects. Losing edge sharpness is equivalent to losing the object itself in the navigation stack.
+
+<br>
+
+### 2. Gaussian Blur *(Linear Weighted)*
+| High Contrast (Clear Highway) | Low Contrast (Rainy City) |
+| :---: | :---: |
+| <img src="data/processed_annotated/clear_highway_gaussian_filter_3x3.jpg" width="450"> | <img src="data/processed_annotated/rainy_city_gaussian_filter_3x3.jpg" width="450"> |
+
+> **Weighted Smoothing.** Provides a natural distribution, concentrating on the central pixel. Excellent for reducing sensor white noise on a highway, but mathematically insufficient to isolate sharp impulsive noise like rain streaks or lens glare.
+
+<br>
+
+### 3. Median Filter *(Non-Linear)*
+| High Contrast (Clear Highway) | Low Contrast (Rainy City) |
+| :---: | :---: |
+| <img src="data/processed_annotated/clear_highway_median_filter_5x5.jpg" width="450"> | <img src="data/processed_annotated/rainy_city_median_filter_5x5.jpg" width="450"> |
+
+> **🏆 Optimal ADAS Solution.** Unlike averaging, this kernel uses rank statistics. By selecting the median value, it treats rain droplets as outliers and effectively eradicates them while **perfectly maintaining mathematical edge sharpness**. This "Edge-Preserving" property is the industry standard for low-visibility pre-processing.
+> 
 ### 🧠 Deep Comparative Analysis: Linear Pitfalls vs. Non-Linear Resilience
 
 In a professional computer vision pipeline for autonomous vehicles, noise suppression is the critical stage before feature extraction. My experiment reveals a fundamental divergence between mathematical approaches:
