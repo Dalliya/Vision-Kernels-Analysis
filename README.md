@@ -88,14 +88,14 @@ In the *Rainy City* scenario, the sensor is bombarded with high-frequency impuls
 ---
 ---
 
-## 🔬 Block 3: Sharpening (Detail Recovery)
-*Applying Unsharp Masking to recover frequencies lost during the smoothing phase.*
+---
 
-<div align="center">
-  <img src="data/processed_annotated/pipeline_2_sharpened_unsharp_mask.jpg" width="600">
-</div>
+## 🔬 Block 3: Frequency Restoration (Unsharp Masking)
+*Addressing the inevitable high-frequency attenuation caused by noise-suppression algorithms before passing the tensor to the edge-detection stack.*
 
-> **💡 Engineering Conclusion:** By subtracting a blurred version of the image from the original (Unsharp Masking), we successfully enhance the high-frequency components of the cars. This non-linear restoration is critical for preparing data for deeper network layers.
+| Pipeline Stage & ADAS Significance | Restored Signal (Rainy City) |
+| :--- | :---: |
+| **Unsharp Masking**<br>*(Detail Recovery)*<br><br>**Mathematical logic:** We subtract a Gaussian-blurred version of the image from the original tensor. This isolates the high-frequency components (the "edges"), which are then amplified and added back to the base image.<br><br>🎯 **ADAS Use Case:** Any smoothing filter inevitably causes slight signal degradation. Sharpening acts as a **Contrast Booster** for the perception system. By artificially enhancing the silhouettes of vehicles, we drastically improve the **Confidence Scores** of downstream object detection models (like YOLO). A blurry car might yield a 45% confidence threshold (risking a missed detection), while a sharpened, high-contrast silhouette jumps to 95%, preventing a dangerous "False Negative" during heavy rain. | <img src="data/processed_annotated/pipeline_2_sharpened_unsharp_mask.jpg" width="450"> |
 
 ---
 
