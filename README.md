@@ -275,7 +275,7 @@ The massive mathematical divergence recorded in the SAD topology maps perfectly 
 
 </div>
 
-**Project Thesis:** "In this study, I transitioned from manual mathematical foundations to automated linear stress-testing. This research proves that the massive performance gap between structured silhouettes and chaotic textures is the exact point where pure logic demands deeper neural connections."
+**Project Thesis:** "In this study, I transitioned from manual mathematical foundations to automated linear stress-testing. The conclusion is absolute: the chasm between perfect geometry and chaotic textures is the exact point where static code dies, and deep neural connections become an architectural necessity."
 
 <div align="center">
 <br>
