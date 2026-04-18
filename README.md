@@ -206,12 +206,34 @@ Unlike classical filters that are hard-coded for one specific task, these CNN pr
 ## 🔬 Block 6: Spatial Reduction & Translational Invariance (Pooling)
 *Simulating the mathematical compression of spatial tensors. Analyzing how downsampling affects the structural integrity of detected obstacles.*
 
-| Pooling Strategy & ADAS Engineering Logic | High Contrast (Clear Highway) | Low Contrast (Rainy City) |
-| :--- | :---: | :---: |
-| **Original Edge Map**<br>*(Baseline Feature Tensor)*<br><br>The high-resolution feature map generated after the noise-reduction and edge-detection pipeline. While visually precise, this raw tensor is computationally heavy and lacks spatial abstraction. | <img src="data/processed_annotated/pooling_highway_0_original_edges_before_pooling.jpg" width="500"> | <img src="data/processed_annotated/pooling_rainy_0_original_edges_before_pooling.jpg" width="500"> |
-| **Average Pooling (2x2)**<br>*(Linear Signal Dilution)*<br><br>**Analytical Failure:** Calculates the mean value of the local window. This linear approach acts as a secondary blur, diluting the sharp signals of lane markings and car silhouettes. <br><br>⚠️ **Safety Risk:** In an ADAS context, this "washing out" of edges leads to high uncertainty in object localization, potentially causing the vehicle to miscalculate the distance to a leading car. | <img src="data/processed_annotated/pooling_highway_2_average_pooled_2x2.jpg" width="500"> | <img src="data/processed_annotated/pooling_rainy_2_average_pooled_2x2.jpg" width="500"> |
-| **Max Pooling (2x2)**<br>*(Non-Linear Significance Filter)*<br><br>**🏆 Optimal Perception Strategy.** Instead of averaging, this operation selects the **Peak Activation** (the strongest edge signal) within the kernel. It discards background noise and passes only the most critical geometric data to the next layer.<br><br>🎯 **The Goal:** Max Pooling is the mathematical key to **Translational Invariance**—ensuring the autopilot recognizes the obstacle regardless of its exact pixel coordinates. | <img src="data/processed_annotated/pooling_highway_1_max_pooled_2x2.jpg" width="500"> | <img src="data/processed_annotated/pooling_rainy_1_max_pooled_2x2.jpg" width="500"> |
+### 1. Original Edge Map *(Baseline Feature Tensor)*
+| High Contrast (Clear Highway) | Low Contrast (Rainy City) |
+| :---: | :---: |
+| <img src="data/processed_annotated/pooling_highway_0_original_edges_before_pooling.jpg" width="450"> | <img src="data/processed_annotated/pooling_rainy_0_original_edges_before_pooling.jpg" width="450"> |
 
+> The high-resolution feature map generated after the noise-reduction and edge-detection pipeline. While visually precise, this raw tensor is computationally heavy and lacks spatial abstraction.
+
+<br>
+
+### 2. Average Pooling (2x2) *(Linear Signal Dilution)*
+| High Contrast (Clear Highway) | Low Contrast (Rainy City) |
+| :---: | :---: |
+| <img src="data/processed_annotated/pooling_highway_2_average_pooled_2x2.jpg" width="450"> | <img src="data/processed_annotated/pooling_rainy_2_average_pooled_2x2.jpg" width="450"> |
+
+> **Analytical Failure:** Calculates the mean value of the local window. This linear approach acts as a secondary blur, diluting the sharp signals of lane markings and car silhouettes. 
+> 
+> ⚠️ **Safety Risk:** In an ADAS context, this "washing out" of edges leads to high uncertainty in object localization, potentially causing the vehicle to miscalculate the distance to a leading car.
+
+<br>
+
+### 3. Max Pooling (2x2) *(Non-Linear Significance Filter)*
+| High Contrast (Clear Highway) | Low Contrast (Rainy City) |
+| :---: | :---: |
+| <img src="data/processed_annotated/pooling_highway_1_max_pooled_2x2.jpg" width="450"> | <img src="data/processed_annotated/pooling_rainy_1_max_pooled_2x2.jpg" width="450"> |
+
+> **🏆 Optimal Perception Strategy.** Instead of averaging, this operation selects the **Peak Activation** (the strongest edge signal) within the kernel. It discards background noise and passes only the most critical geometric data to the next layer.
+> 
+> 🎯 **The Goal:** Max Pooling is the mathematical key to **Translational Invariance**—ensuring the autopilot recognizes the obstacle regardless of its exact pixel coordinates.
 ### 🧠 Deep Dive: Why Spatial Invariance Matters for Autopilots
 
 In modern CNN architectures, Pooling layers serve two critical functions that go beyond simple data reduction:
