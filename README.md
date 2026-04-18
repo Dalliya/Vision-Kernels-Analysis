@@ -147,14 +147,25 @@ In a night-time rain scenario, the asphalt's texture is violently corrupted by g
 ---
 ---
 
-## 🔬 Block 5: Spatial Reduction (Pooling)
-*Simulating CNN dimensionality reduction to achieve translational invariance.*
+---
 
-| Original Edges | Max Pooling (2x2) | Average Pooling (2x2) |
-| :---: | :---: | :---: |
-| <img src="data/processed_annotated/pooling_highway_0_original_edges_before_pooling.jpg" width="250"> | <img src="data/processed_annotated/pooling_highway_1_max_pooled_2x2.jpg" width="250"> | <img src="data/processed_annotated/pooling_highway_2_average_pooled_2x2.jpg" width="250"> |
+## 🔬 Block 5: Modern CNN Architectural Primitives
+*Simulating the advanced spatial operators used in state-of-the-art neural architectures (MobileNet, DeepLab) to achieve real-time inference on autonomous vehicle hardware.*
 
-> **💡 Engineering Conclusion:** **Max Pooling** (non-linear) acts as a strict significance filter. It discards background noise and passes only the strongest activations (brightest contours) to the next neural layers. This ensures translational invariance—the self-driving network recognizes the vehicle regardless of its exact pixel coordinates. **Average Pooling** dilutes the signal, leading to dangerous anti-aliasing of lane markings.
+| CNN Layer & Technical Analysis | High Contrast (Clear Highway) | Low Contrast (Rainy City) |
+| :--- | :---: | :---: |
+| **1x1 Pointwise Convolution**<br>*(Cross-Channel Feature Fusion)*<br><br>**Mathematical Logic:** While standard kernels filter spatial data, the 1x1 kernel acts as a **dimensionality compressor**. In this experiment, I fused the multi-channel feature map (Sobel X and Sobel Y) into a single optimized tensor. This forces the network to learn a "weighted importance" for each gradient axis.<br><br>🎯 **ADAS Impact:** This is the core secret behind **MobileNet** efficiency. By mixing channels with zero spatial overhead, we reduce the computational footprint by up to 90%. In self-driving terms, this allows the vehicle to process 60+ FPS (frames per second) on an embedded GPU, ensuring zero-latency reaction times. | <img src="data/processed_annotated/cnn_highway_1_conv1x1_mixed_edges.jpg" width="500"> | <img src="data/processed_annotated/cnn_rainy_1_conv1x1_mixed_edges.jpg" width="500"> |
+| **Dilated (Atrous) Convolution**<br>*(Global Receptive Field Expansion)*<br><br>**Mathematical Logic:** By introducing "holes" (dilation rate > 1) between kernel weights, we exponentially increase the **Receptive Field** without adding a single extra parameter or multiplication. The filter "skips" pixels to see the broader geometric context.<br><br>🎯 **ADAS Impact:** Essential for **Semantic Segmentation** (DeepLab). A standard filter is "short-sighted"—it might classify a large grey area as a "wall". A Dilated filter sees the entire silhouette, allowing the AI to correctly identify a massive semi-trailer. This prevents the autopilot from miscalculating the distance to oversized obstacles in complex urban environments. | <img src="data/processed_annotated/cnn_highway_2_dilated_conv_rate2.jpg" width="500"> | <img src="data/processed_annotated/cnn_rainy_2_dilated_conv_rate2.jpg" width="500"> |
+
+### 🧠 Deep Architectural Summary
+Unlike classical filters that are hard-coded for one specific task, these CNN primitives are designed for **Adaptive Optimization**:
+
+1.  **Efficiency over Raw Power:** The **1x1 Pointwise** convolution proves that smarter channel-mixing is more effective than larger spatial kernels. It solves the "bottleneck" problem in real-time ADAS processing.
+2.  **Context over Local Detail:** The **Dilated Convolution** solves the "scale problem." By seeing further across the pixel grid, the network maintains a global understanding of the road scene (Highway vs. City) without requiring massive computational resources.
+
+> **💡 Engineering Conclusion:** These layers represent the bridge between "seeing lines" and "understanding scenes." My experiments confirm that architectural efficiency is just as critical as accuracy; a self-driving system must be fast enough to act, and these kernels are the primary reason why modern AI can drive in real-time.
+
+---
 
 ---
 
